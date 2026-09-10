@@ -50,5 +50,21 @@ namespace MyDogamDesktop.Services
 
             return collection.Id;
         }
+        public async Task DeleteCollectionAsync(int collectionId)
+        {
+            using var db = new AppDbContext();
+
+            // 컬렉션 내부 아이템 먼저 삭제
+            var items = db.Items.Where(i => i.CollectionId == collectionId);
+            db.Items.RemoveRange(items);
+
+            // 컬렉션 삭제
+            var collection = await db.Collections.FindAsync(collectionId);
+            if (collection != null) {
+                db.Collections.Remove(collection);
+            }
+
+            await db.SaveChangesAsync();
+        }
     }
 }
