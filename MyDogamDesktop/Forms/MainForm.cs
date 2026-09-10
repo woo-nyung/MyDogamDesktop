@@ -1,6 +1,4 @@
 using MyDogamDesktop.Services;
-using MyDogamDesktop.Models;
-using System.Text.Json;
 
 namespace MyDogamDesktop
 {
@@ -11,11 +9,6 @@ namespace MyDogamDesktop
         public MainForm()
         {
             InitializeComponent();
-        }
-
-        private async void MainForm_Load(object sender, EventArgs e)
-        {
-            await LoadCollections();
         }
 
         private async void btnUpload_Click(object sender, EventArgs e)
@@ -41,7 +34,7 @@ namespace MyDogamDesktop
             }
         }
 
-        private async Task LoadCollections()
+        private async void LoadCollections()
         {
             var service = new CollectionService();
             _collections = await service.GetAllCollectionsAsync();
@@ -119,6 +112,21 @@ namespace MyDogamDesktop
                 }
             }
             txtItemInfo.Text = infoText;
+        }
+
+        private async void lstCollections_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstCollections.SelectedIndex == -1) return;
+
+            var selected = _collections[lstCollections.SelectedIndex];
+            var service = new CollectionService();
+            var items = await service.GetItemsByCollectionIdAsync(selected.Id);
+
+            lstItems.Items.Clear();
+            foreach(var item in items)
+            {
+                lstItems.Items.Add($"{item.ItemId} - {item.Name} (수량: {item.Count})");
+            }
         }
     }
 }
