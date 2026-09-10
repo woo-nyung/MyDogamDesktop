@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 using Microsoft.EntityFrameworkCore;
 using MyDogamDesktop.Data;
@@ -66,7 +67,6 @@ namespace MyDogamDesktop.Services
 
             await db.SaveChangesAsync();
         }
-
         public async Task UpdateItemCountAsync(int itemId, int newCount)
         {
             using var db = new AppDbContext();
@@ -76,6 +76,11 @@ namespace MyDogamDesktop.Services
                 item.Count = newCount;
                 await db.SaveChangesAsync();
             }
+        }
+        public async Task<List<CollectionItem>> SearchItemsAsync(int collectionId, string keyword)
+        {
+            using var db = new AppDbContext();
+            return await db.Items.Where(i => i.CollectionId == collectionId && i.Name.Contains(keyword)).ToListAsync();
         }
     }
 }

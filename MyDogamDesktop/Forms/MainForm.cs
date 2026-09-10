@@ -112,7 +112,7 @@ namespace MyDogamDesktop
             if (metadata != null)
             {
                 foreach (var kv in metadata)
-                { 
+                {
                     if (kv.Key != "img_src" && kv.Key != "name" && kv.Key != "count")
                     {
                         infoText += $"상셍 정보: {kv.Value}";
@@ -135,6 +135,37 @@ namespace MyDogamDesktop
             dgvItems.Refresh();
 
             MessageBox.Show("수량이 저장되었습니다.");
+        }
+
+        private async void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (lstCollections.SelectedIndex == -1)
+            {
+                MessageBox.Show("먼저 컬렉션을 선택하세요.");
+                return;
+            }
+
+            var selectedCollection = _collections[lstCollections.SelectedIndex];
+            var service = new CollectionService();
+
+            string keyword = txtSearch.Text.Trim();
+
+            if (string.IsNullOrEmpty(keyword))
+            {
+                _items = await service.GetItemsByCollectionIdAsync(selectedCollection.Id);
+            }
+            else
+            {
+                _items = await service.SearchItemsAsync(selectedCollection.Id, keyword);
+            }
+
+            dgvItems.DataSource = null;
+            dgvItems.DataSource = _items;
+
+            dgvItems.Columns["Id"]!.Visible = false;
+            dgvItems.Columns["CollectionId"]!.Visible = false;
+            dgvItems.Columns["MetadataJson"]!.Visible = false;
+            dgvItems.Columns["Collection"]!.Visible = false;
         }
     }
 }

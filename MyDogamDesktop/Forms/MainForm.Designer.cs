@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             btnUpload = new Button();
             lstCollections = new ListBox();
             arrowLabel = new Label();
@@ -39,6 +39,8 @@
             cntLabel = new Label();
             btnUpdateCount = new Button();
             dgvItems = new DataGridView();
+            txtSearch = new TextBox();
+            btnSearch = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBoxItem).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numCount).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvItems).BeginInit();
@@ -69,7 +71,7 @@
             arrowLabel.AutoSize = true;
             arrowLabel.Font = new Font("맑은 고딕", 16F);
             arrowLabel.ForeColor = SystemColors.WindowFrame;
-            arrowLabel.Location = new Point(177, 210);
+            arrowLabel.Location = new Point(179, 277);
             arrowLabel.Name = "arrowLabel";
             arrowLabel.Size = new Size(44, 37);
             arrowLabel.TabIndex = 3;
@@ -142,23 +144,45 @@
             dgvItems.AllowUserToAddRows = false;
             dgvItems.BackgroundColor = SystemColors.Window;
             dgvItems.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Window;
-            dataGridViewCellStyle1.Font = new Font("맑은 고딕", 7F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
-            dgvItems.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("맑은 고딕", 7F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvItems.DefaultCellStyle = dataGridViewCellStyle2;
             dgvItems.GridColor = SystemColors.ControlDarkDark;
-            dgvItems.Location = new Point(227, 18);
+            dgvItems.Location = new Point(227, 66);
             dgvItems.Name = "dgvItems";
             dgvItems.ReadOnly = true;
             dgvItems.RowHeadersWidth = 51;
             dgvItems.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvItems.Size = new Size(464, 515);
+            dgvItems.Size = new Size(464, 467);
             dgvItems.TabIndex = 10;
             dgvItems.SelectionChanged += dgvItems_SelectionChanged;
+            // 
+            // txtSearch
+            // 
+            txtSearch.BorderStyle = BorderStyle.FixedSingle;
+            txtSearch.Font = new Font("맑은 고딕", 10F);
+            txtSearch.ForeColor = SystemColors.WindowText;
+            txtSearch.Location = new Point(227, 18);
+            txtSearch.Multiline = true;
+            txtSearch.Name = "txtSearch";
+            txtSearch.PlaceholderText = "캐릭터 이름 입력...";
+            txtSearch.Size = new Size(355, 33);
+            txtSearch.TabIndex = 11;
+            // 
+            // btnSearch
+            // 
+            btnSearch.Location = new Point(588, 15);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(103, 39);
+            btnSearch.TabIndex = 12;
+            btnSearch.Text = "검색";
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
             // 
             // MainForm
             // 
@@ -166,6 +190,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.InactiveBorder;
             ClientSize = new Size(1015, 561);
+            Controls.Add(btnSearch);
+            Controls.Add(txtSearch);
             Controls.Add(dgvItems);
             Controls.Add(btnUpdateCount);
             Controls.Add(cntLabel);
@@ -197,5 +223,7 @@
         private Label cntLabel;
         private Button btnUpdateCount;
         private DataGridView dgvItems;
+        private TextBox txtSearch;
+        private Button btnSearch;
     }
 }
