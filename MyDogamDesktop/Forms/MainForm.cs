@@ -60,11 +60,13 @@ namespace MyDogamDesktop
             var service = new CollectionService();
             _items = await service.GetItemsByCollectionIdAsync(selected.Id);
 
-            lstItems.Items.Clear();
-            foreach (var item in _items)
-            {
-                lstItems.Items.Add($"{item.ItemId} - {item.Name} (수량: {item.Count})");
-            }
+            dgvItems.DataSource = null;
+            dgvItems.DataSource = _items;
+
+            dgvItems.Columns["Id"]!.Visible = false;
+            dgvItems.Columns["CollectionId"]!.Visible = false;
+            dgvItems.Columns["MetadataJson"]!.Visible = false;
+            dgvItems.Columns["Collection"]!.Visible = false;
         }
 
         private async void btnDelete_Click(object sender, EventArgs e)
@@ -83,42 +85,38 @@ namespace MyDogamDesktop
                 var service = new CollectionService();
                 await service.DeleteCollectionAsync(selected.Id);
 
-                lstItems.Items.Clear();
+                dgvItems.DataSource = null;
                 await LoadCollections();
             }
         }
 
-        private void lstItems_SelectedIndexChanged(object sender, EventArgs e)
+        private void dgvItems_SelectionChanged(object sender, EventArgs e)
         {
-            if (lstItems.SelectedIndex == -1) return;
+            if (dgvItems.CurrentRow == null) return;
 
-            var selected = _items[lstItems.SelectedIndex];
+            var selected = (CollectionItem)dgvItems.CurrentRow!.DataBoundItem!;
+
             var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(selected.MetadataJson);
 
             if (metadata != null && metadata.TryGetValue("img_src", out object? imgSrc))
             {
-                try
-                {
-                    pictureBoxItem.ImageLocation = imgSrc.ToString();
-                }
-                catch
-                {
-                    pictureBoxItem.Image = null;
-                }
+                try { pictureBoxItem.ImageLocation = imgSrc.ToString(); }
+                catch { pictureBoxItem.Image = null; }
             }
             else
             {
                 pictureBoxItem.Image = null;
             }
 
-
-            var infoText = $"ID: {selected.ItemId}\r\n이름: {selected.Name}\r\n수량: {selected.Count}\r\n";
+            var infoText = $"ID: {selected.ItemId}\r\n이름: {selected.Name}\r\n수량: {selected.Count}";
             if (metadata != null)
             {
                 foreach (var kv in metadata)
-                {
-                    if (kv.Key == "id" || kv.Key == "name" || kv.Key == "img_src" || kv.Key == "count") continue;
-                    infoText += $"세부 정보: {kv.Value}\r\n";
+                { 
+                    if (kv.Key != "img_src" && kv.Key != "name" && kv.Key != "count")
+                    {
+                        infoText += $"상셍 정보: {kv.Value}";
+                    }
                 }
             }
             txtItemInfo.Text = infoText;
@@ -127,14 +125,14 @@ namespace MyDogamDesktop
 
         private async void btnUpdateCount_Click(object sender, EventArgs e)
         {
-            if (lstItems.SelectedIndex == -1) return;
+            if (dgvItems.CurrentRow == null) return;
 
-            var selected = _items[lstItems.SelectedIndex];
+            var selected = (CollectionItem)dgvItems.CurrentRow!.DataBoundItem!;
             var service = new CollectionService();
             await service.UpdateItemCountAsync(selected.Id, (int)numCount.Value);
 
             selected.Count = (int)numCount.Value;
-            lstItems.Items[lstItems.SelectedIndex] = $"{selected.ItemId} - {selected.Name} (수량: {selected.Count})";
+            dgvItems.Refresh();
 
             MessageBox.Show("수량이 저장되었습니다.");
         }
