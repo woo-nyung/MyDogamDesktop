@@ -66,5 +66,16 @@ namespace MyDogamDesktop.Services
 
             await db.SaveChangesAsync();
         }
+
+        public async Task UpdateItemCountAsync(int itemId, int newCount)
+        {
+            using var db = new AppDbContext();
+            var item = await db.Items.FindAsync(itemId);
+            if (item != null)
+            {
+                item.Count = newCount;
+                await db.SaveChangesAsync();
+            }
+        }
     }
 }

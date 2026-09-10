@@ -1,4 +1,6 @@
 using MyDogamDesktop.Services;
+using MyDogamDesktop.Models;
+using System.Text.Json;
 
 namespace MyDogamDesktop
 {
@@ -9,6 +11,10 @@ namespace MyDogamDesktop
         public MainForm()
         {
             InitializeComponent();
+        }
+        private async void MainForm_Load(object sender, EventArgs e)
+        {
+            await LoadCollections();
         }
 
         private async void btnUpload_Click(object sender, EventArgs e)
@@ -34,7 +40,7 @@ namespace MyDogamDesktop
             }
         }
 
-        private async void LoadCollections()
+        private async Task LoadCollections()
         {
             var service = new CollectionService();
             _collections = await service.GetAllCollectionsAsync();
@@ -89,7 +95,8 @@ namespace MyDogamDesktop
             var selected = _items[lstItems.SelectedIndex];
             var metadata = JsonSerializer.Deserialize<Dictionary<string, object>>(selected.MetadataJson);
 
-            if (metadata != null && metadata.TryGetValue("img_src", out object? imgSrc)) {
+            if (metadata != null && metadata.TryGetValue("img_src", out object? imgSrc))
+            {
                 try
                 {
                     pictureBoxItem.ImageLocation = imgSrc.ToString();
@@ -105,28 +112,31 @@ namespace MyDogamDesktop
             }
 
 
-            var infoText = $"ID: {selected.ItemId}\r\n이름: {selected.Name}\r\n수량: {selected.Count}\r\n\r\n";
-            if (metadata != null) {
-                foreach (var kv in metadata) {
-                    infoText += $"{kv.Key}: {kv.Value}\r\n";
+            var infoText = $"ID: {selected.ItemId}\r\n이름: {selected.Name}\r\n수량: {selected.Count}\r\n";
+            if (metadata != null)
+            {
+                foreach (var kv in metadata)
+                {
+                    if (kv.Key == "id" || kv.Key == "name" || kv.Key == "img_src" || kv.Key == "count") continue;
+                    infoText += $"세부 정보: {kv.Value}\r\n";
                 }
             }
             txtItemInfo.Text = infoText;
+            numCount.Value = selected.Count;
         }
 
-        private async void lstCollections_SelectedIndexChanged(object sender, EventArgs e)
+        private async void btnUpdateCount_Click(object sender, EventArgs e)
         {
-            if (lstCollections.SelectedIndex == -1) return;
+            if (lstItems.SelectedIndex == -1) return;
 
-            var selected = _collections[lstCollections.SelectedIndex];
+            var selected = _items[lstItems.SelectedIndex];
             var service = new CollectionService();
-            var items = await service.GetItemsByCollectionIdAsync(selected.Id);
+            await service.UpdateItemCountAsync(selected.Id, (int)numCount.Value);
 
-            lstItems.Items.Clear();
-            foreach(var item in items)
-            {
-                lstItems.Items.Add($"{item.ItemId} - {item.Name} (수량: {item.Count})");
-            }
+            selected.Count = (int)numCount.Value;
+            lstItems.Items[lstItems.SelectedIndex] = $"{selected.ItemId} - {selected.Name} (수량: {selected.Count})";
+
+            MessageBox.Show("수량이 저장되었습니다.");
         }
     }
 }

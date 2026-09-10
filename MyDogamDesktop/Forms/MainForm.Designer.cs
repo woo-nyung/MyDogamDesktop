@@ -35,17 +35,22 @@
             btnDelete = new Button();
             pictureBoxItem = new PictureBox();
             txtItemInfo = new TextBox();
+            numCount = new NumericUpDown();
+            cntLabel = new Label();
+            btnUpdateCount = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBoxItem).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numCount).BeginInit();
             SuspendLayout();
             // 
             // btnUpload
             // 
+            btnUpload.BackColor = SystemColors.Window;
             btnUpload.Location = new Point(24, 18);
             btnUpload.Name = "btnUpload";
             btnUpload.Size = new Size(74, 39);
             btnUpload.TabIndex = 0;
             btnUpload.Text = "추가";
-            btnUpload.UseVisualStyleBackColor = true;
+            btnUpload.UseVisualStyleBackColor = false;
             btnUpload.Click += btnUpload_Click;
             // 
             // lstCollections
@@ -80,17 +85,19 @@
             // 
             // btnDelete
             // 
+            btnDelete.BackColor = SystemColors.Window;
             btnDelete.Location = new Point(104, 18);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(73, 39);
             btnDelete.TabIndex = 4;
             btnDelete.Text = "삭제";
-            btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.UseVisualStyleBackColor = false;
             btnDelete.Click += btnDelete_Click;
             // 
             // pictureBoxItem
             // 
-            pictureBoxItem.BackColor = SystemColors.WindowFrame;
+            pictureBoxItem.BackColor = SystemColors.Window;
+            pictureBoxItem.BorderStyle = BorderStyle.FixedSingle;
             pictureBoxItem.Location = new Point(506, 19);
             pictureBoxItem.Name = "pictureBoxItem";
             pictureBoxItem.Size = new Size(271, 280);
@@ -101,13 +108,41 @@
             // txtItemInfo
             // 
             txtItemInfo.BackColor = SystemColors.ControlLightLight;
-            txtItemInfo.BorderStyle = BorderStyle.None;
-            txtItemInfo.Location = new Point(506, 313);
+            txtItemInfo.BorderStyle = BorderStyle.FixedSingle;
+            txtItemInfo.Location = new Point(506, 347);
             txtItemInfo.Multiline = true;
             txtItemInfo.Name = "txtItemInfo";
             txtItemInfo.ReadOnly = true;
-            txtItemInfo.Size = new Size(271, 110);
+            txtItemInfo.ScrollBars = ScrollBars.Horizontal;
+            txtItemInfo.Size = new Size(271, 76);
             txtItemInfo.TabIndex = 6;
+            // 
+            // numCount
+            // 
+            numCount.BorderStyle = BorderStyle.FixedSingle;
+            numCount.Location = new Point(555, 311);
+            numCount.Name = "numCount";
+            numCount.Size = new Size(124, 27);
+            numCount.TabIndex = 7;
+            // 
+            // cntLabel
+            // 
+            cntLabel.AutoSize = true;
+            cntLabel.Location = new Point(510, 314);
+            cntLabel.Name = "cntLabel";
+            cntLabel.Size = new Size(39, 20);
+            cntLabel.TabIndex = 8;
+            cntLabel.Text = "수량";
+            // 
+            // btnUpdateCount
+            // 
+            btnUpdateCount.Location = new Point(685, 306);
+            btnUpdateCount.Name = "btnUpdateCount";
+            btnUpdateCount.Size = new Size(92, 35);
+            btnUpdateCount.TabIndex = 9;
+            btnUpdateCount.Text = "수량 저장";
+            btnUpdateCount.UseVisualStyleBackColor = true;
+            btnUpdateCount.Click += btnUpdateCount_Click;
             // 
             // MainForm
             // 
@@ -115,6 +150,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.InactiveBorder;
             ClientSize = new Size(800, 450);
+            Controls.Add(btnUpdateCount);
+            Controls.Add(cntLabel);
+            Controls.Add(numCount);
             Controls.Add(txtItemInfo);
             Controls.Add(pictureBoxItem);
             Controls.Add(btnDelete);
@@ -126,6 +164,7 @@
             Text = "MY도감";
             Load += MainForm_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBoxItem).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numCount).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -138,5 +177,8 @@
         private Button btnDelete;
         private PictureBox pictureBoxItem;
         private TextBox txtItemInfo;
+        private NumericUpDown numCount;
+        private Label cntLabel;
+        private Button btnUpdateCount;
     }
 }
